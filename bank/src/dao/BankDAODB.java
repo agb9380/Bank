@@ -207,9 +207,12 @@ public class BankDAODB {
 
 			while (rs.next()) {
 				list.add(rs.getString("ACCOUNT_NUMBER"));
+				//balance가 0일 때만 삭제할 수 있도록 제약 조건 추가
 			}
 
 			if (list.size() == 1) {
+				
+				
 				delete_sql.append("DELETE ACCOUNT WHERE ACCOUNT_NUMBER = ? ");
 				
 				pstmt = conn.prepareStatement(delete_sql.toString());
