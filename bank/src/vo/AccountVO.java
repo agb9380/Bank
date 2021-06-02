@@ -1,17 +1,17 @@
 package vo;
 
-public class Account {
+public class AccountVO {
 	String actNum;
 	String bankName;
 	String memberId;
 	int balance;
 	String actName;
 	
-	public Account() {
+	public AccountVO() {
 		
 	}
 
-	public Account(String actNum, String bankName, String memberId, int balance, String actName) {
+	public AccountVO(String actNum, String bankName, String memberId, int balance, String actName) {
 		super();
 		this.actNum = actNum;
 		this.bankName = bankName;
@@ -59,6 +59,4 @@ public class Account {
 	public void setActName(String actName) {
 		this.actName = actName;
 	}
-
-	
 }

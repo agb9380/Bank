@@ -1,7 +1,7 @@
 package ui;
 
 import java.util.List;
-import vo.Member;
+import vo.MemberVO;
 
 public class BankUI extends BankBaseUI {
 
@@ -13,7 +13,9 @@ public class BankUI extends BankBaseUI {
 	
 	@Override
 	public void execute() {
-		System.out.println("하나은행에 오신 것을 환영합니다. 로그인해주세요.");
+		
+		System.out.println("하나은행 통합 계좌관리에 접속하신 것을 환영합니다. 로그인해주세요.");
+		
 		login(); // 로그인 성공한 뒤 menu 선택
 		while (true) {
 
@@ -33,20 +35,21 @@ public class BankUI extends BankBaseUI {
 			case 4:
 				ui = new deleteAcntUI();
 				break;
-//			case 5:
-//				ui = new alterActNameUI();
-//				break;
-//			case 6:
-//				ui = new transferUI();
-//				break;
-//			case 7:
-//				ui = new transHistoryUI();
-//				break;
-//			case 8 :
-//				ui = new createAct();
-//			case 0:
-//				ui = new exitUI();
-//				break;
+			case 5:
+				ui = new alterActNameUI();
+				break;
+			case 6:
+				ui = new transferUI();
+				break;
+			case 7:
+				ui = new transHistoryUI();
+				break;
+			case 8 :
+				ui = new createAct();
+				break;
+			case 0:
+				ui = new exitUI();
+				break;
 			}
 
 			if (ui != null) {
@@ -60,7 +63,7 @@ public class BankUI extends BankBaseUI {
 
 	public int menu() {
 		System.out.println("---------------------------------------------");
-		System.out.println("\t 통합계좌 관리 프로그램");
+		System.out.println("\t 하나은행 통합계좌 관리 프로그램");
 		System.out.println("---------------------------------------------");
 		System.out.println("\t1. 전체 계좌 조회");
 		System.out.println("\t2. 개별 계좌 조회");
@@ -71,7 +74,7 @@ public class BankUI extends BankBaseUI {
 		System.out.println("\t7. 거래 내역 조회");
 		System.out.println("\t8. 계좌 생성");
 		System.out.println("\t0. 종료");
-		System.out.println("---------------");
+		System.out.println("---------------------------------------------");
 
 		int type = scanInt("메뉴 중 원하는 항목을 선택하세요 : ");
 		return type;
@@ -84,7 +87,7 @@ public class BankUI extends BankBaseUI {
 		boolean exit_check = false; // 반복문 나가기
 		String id;
 		String pwd;
-		List<Member> list;
+		List<MemberVO> list;
 
 		try {
 
@@ -96,6 +99,7 @@ public class BankUI extends BankBaseUI {
 
 			// BankService의 인스턴스인 service는, BankService가 상위 클래스(BankBaseUI)에서 protected로
 			// 선언되어있어서 사용할 수 있음
+			// break은 반복문을 나갈 때 사용, for문과 while문 둘 다 나가려면 break 2번 사용해야함
 			try {
 				list = service.전체회원목록서비스(); // DB에서 받아와서 VO로 저장, list에 값들을 저장함
 				id = scanStr("아이디를 입력하세요."); // VO로 받아온 아이디와 비교
@@ -111,15 +115,15 @@ public class BankUI extends BankBaseUI {
 							break;
 						} else
 							System.out.println("비밀번호를 잘못 입력하셨습니다.");
-						break;
+						    break; //for문 나가기
 
 					}
 				}
 				if (exit_check == true)
 					break;
-
+					// 아이디와 비밀번호 일치하는 경우 while 반복문 완전히 나감
 				if (check_id == false)
-					// 아이디가 존재하지 않음
+					// 아이디가 존재하지 않음, 반복문 계속 돌아야함
 					System.out.println("아이디가 존재하지 않습니다.");
 
 			} catch (Exception e) {

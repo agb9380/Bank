@@ -1,6 +1,6 @@
 package vo;
 
-public class Member {
+public class MemberVO {
 	
 	private String id;
 	private String pwd;
@@ -8,11 +8,11 @@ public class Member {
 	private String birth_date;
 	private String enroll_date;
 	
-	public Member() {
+	public MemberVO() {
 		
 	}
 	
-	public Member(String id, String pwd, String name, String birth_date, String enroll_date) {
+	public MemberVO(String id, String pwd, String name, String birth_date, String enroll_date) {
 		super();
 		this.id = id;
 		this.pwd = pwd;
