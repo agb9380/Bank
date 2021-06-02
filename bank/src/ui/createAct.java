@@ -19,6 +19,7 @@ public class createAct extends BankBaseUI {
 //			member 테이블의 최근 계좌 생성일자 가져와서 비교
 //			로그인한 아이디에 해당하는 recent_account_name을 가져오기, [개별계좌조회서비스, 개별계좌조회]에서 recent_account_name가져와야함 AccountVO에 recent_account_name 추가하기
 //			가져와서 List<Account> account =service.개별계좌조회서비스
+//			account.getRecent_date  <== 이게 해당 회원의 최근 계좌 생성 일자
 			
 			AccountVO account = new AccountVO();
 			String actName =scanStr("생성하고 싶은 계좌의 명칭을 입력하세요 : ");
