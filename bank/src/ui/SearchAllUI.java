@@ -10,7 +10,7 @@ public class SearchAllUI extends BankBaseUI {
 	@Override
 	public void execute() {
 		try {
-			List<AccountVO> list=service.전체계좌조회서비스();
+			List<AccountVO> list=service.회원별전체계좌조회서비스();
 			
 			System.out.println("-----------------------------------------");
 			System.out.println("\t" + BankUI.getSession()+"님의 계좌 정보");

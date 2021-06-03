@@ -25,6 +25,12 @@ public class BankService {
 		return memberList;
 	}
 	
+	public List<AccountVO> 전체계좌목록서비스() throws Exception{
+		accountList = dao.전체계좌목록();
+		return accountList;
+	}
+	
+	
 	public List<MemberVO> 개별회원목록서비스() throws Exception {
 		memberList=dao.개별회원목록();
 		return memberList;
@@ -39,8 +45,8 @@ public class BankService {
 		return memberList; 
 	}
 	
-	public List<AccountVO> 전체계좌조회서비스() throws Exception{
-		accountList=dao.전체계좌조회();
+	public List<AccountVO> 회원별전체계좌조회서비스() throws Exception{
+		accountList=dao.회원별전체계좌조회();
 		return accountList;
 	}
 	

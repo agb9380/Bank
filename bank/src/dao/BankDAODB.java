@@ -23,6 +23,7 @@ public class BankDAODB {
 	List<MemberVO> memberList;
 	List<AccountVO> accountList;
 	List<DealVO> dealList;
+//	TransactionVO.java
 
 	// 전체 회원 목록 (로그인 할 때 or 관리자로 회원목록 조회할 때 사용)
 	public List<MemberVO> 전체회원목록() throws Exception {
@@ -61,6 +62,45 @@ public class BankDAODB {
 			JDBCClose.close(conn, pstmt);
 		}
 		return memberList;
+	}
+	
+	
+	public List<AccountVO> 전체계좌목록() throws Exception {
+
+		List<AccountVO> accountList = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = new ConnectionFactory().getConnection();
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("select ACCOUNT_NUMBER, BANK_NAME,MEMBER_ID,BALANCE, ACCOUNT_NAME ");
+			sql.append(" from ACCOUNT ");
+
+			pstmt = conn.prepareStatement(sql.toString());
+
+
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				String actNum = rs.getString("ACCOUNT_NUMBER");
+				String bankName = rs.getString("BANK_NAME");
+				String memberId = rs.getString("MEMBER_ID");
+				int balance = rs.getInt("BALANCE");
+				String actName = rs.getString("ACCOUNT_NAME");
+
+				AccountVO account = new AccountVO(actNum, bankName, memberId, balance, actName);
+				accountList.add(account);
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			JDBCClose.close(conn, pstmt);
+		}
+		return accountList;
 	}
 	
 	
@@ -167,8 +207,10 @@ public class BankDAODB {
 	
 
 /////////////////////////////////////////////////////////////////////
-
-	public List<AccountVO> 전체계좌조회() throws Exception {
+	
+	
+	
+	public List<AccountVO> 회원별전체계좌조회() throws Exception { //로그인한 아이디가 가지고 있는 계좌 정보 조회
 		accountList = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -461,7 +503,6 @@ public class BankDAODB {
 			conn.setAutoCommit(false);   // 입출금 실패 시 롤백하기 위해 오토커밋 해제 
 			StringBuilder insert_sql = new StringBuilder();
 			
-//			StringBuilder select_sql = new StringBuilder();
 			StringBuilder withdrawUpdate_sql = new StringBuilder();
 			StringBuilder depositUpdate_sql = new StringBuilder();
 			
@@ -505,11 +546,11 @@ public class BankDAODB {
 			pstmt.setString(2, deal.getDepositActNo()); // 입금할 계좌 번호
 			
 			pstmt.executeUpdate();
-			conn.commit();
-			//실행끝
+			conn.commit(); //실행 완료 후 commit
+
 			
 		} catch (Exception e) {
-			//에러 발생하면 rollback
+			//에러 발생 rollback
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
@@ -539,7 +580,7 @@ public class BankDAODB {
 			sql.append(" FROM ACCOUNT A ,MEMBER M ");
 			sql.append(" WHERE A.MEMBER_ID = M.MEMBER_ID) IV ");
 			sql.append(" WHERE D.ACCOUNT_NUMBER = IV.ACCOUNT_NUMBER AND MEMBER_ID=? ");
-			sql.append(" ORDER BY D.DEAL_DATE DESC ");
+			sql.append(" ORDER BY D.DEAL_DATE ASC ");
 
 			pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setString(1, BankUI.getSession());
