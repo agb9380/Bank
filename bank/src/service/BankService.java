@@ -20,9 +20,23 @@ public class BankService {
 	}
 	
 	//전체 회원 조회 => 리턴값이 member를 가지고 있는 List
-	public List<MemberVO>전체회원목록서비스() throws Exception {
+	public List<MemberVO> 전체회원목록서비스() throws Exception {
 		 memberList=dao.전체회원목록(); 
 		return memberList;
+	}
+	
+	public List<MemberVO> 개별회원목록서비스() throws Exception {
+		memberList=dao.개별회원목록();
+		return memberList;
+	}
+	
+	public void 회원가입서비스(MemberVO newMember) throws Exception {
+		dao.회원가입(newMember);
+	}
+	
+	public List<MemberVO> 최근계좌생성일자서비스() throws Exception {
+		memberList =dao.최근계좌생성일자();
+		return memberList; 
 	}
 	
 	public List<AccountVO> 전체계좌조회서비스() throws Exception{
@@ -46,7 +60,6 @@ public class BankService {
 	
 	public void 계좌명칭변경서비스() throws Exception{
 		dao.계좌명칭변경();
-		
 	}
 	
 	public void 계좌생성서비스(AccountVO account) throws Exception{
@@ -58,7 +71,7 @@ public class BankService {
 	}
 	
 	public List<DealVO> 거래내역조회서비스() throws Exception{
-		List<DealVO> dealList = dao.거래내역조회();
+		dealList = dao.거래내역조회();
 		return dealList;
 	}
 	

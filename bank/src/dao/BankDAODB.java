@@ -35,7 +35,7 @@ public class BankDAODB {
 			conn = new ConnectionFactory().getConnection();
 			StringBuilder sql = new StringBuilder();
 
-			sql.append("select member_id, pwd, name, birt_date, enroll_date ");
+			sql.append("select member_id, pwd, name, birt_date, enroll_date, trim(RECENT_ACCOUNT_DATE) ");
 			sql.append(" from member ");
 
 			pstmt = conn.prepareStatement(sql.toString());
@@ -48,8 +48,9 @@ public class BankDAODB {
 				String name = rs.getString("name");
 				String birth_date = rs.getString("birt_date");
 				String enroll_date = rs.getString("enroll_date");
-
-				MemberVO member = new MemberVO(id, pwd, name, birth_date, enroll_date);
+				String recent_account_date = rs.getString("trim(RECENT_ACCOUNT_DATE)");
+				MemberVO member = new MemberVO(id, pwd, name, birth_date, enroll_date,recent_account_date);
+				
 				memberList.add(member);
 
 			}
@@ -61,6 +62,109 @@ public class BankDAODB {
 		}
 		return memberList;
 	}
+	
+	
+	public void 회원가입(MemberVO newMember) throws Exception{
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = new ConnectionFactory().getConnection();
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("INSERT INTO MEMBER (MEMBER_ID,PWD,NAME, BIRT_DATE) ");
+			sql.append(" VALUES(?, ?, ?, ?) ");
+
+			pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, newMember.getId());
+			pstmt.setString(2, newMember.getPwd());
+			pstmt.setString(3, newMember.getName());
+			pstmt.setString(4, newMember.getBirth_date());
+			
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			JDBCClose.close(conn, pstmt);
+		}	
+		
+	}
+	
+	public List<MemberVO> 최근계좌생성일자() throws Exception{
+		
+		memberList = new ArrayList<>(); // 멤버 객체를 저장할 수 있는 list
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = new ConnectionFactory().getConnection();
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("select nvl(trunc(sysdate-RECENT_ACCOUNT_DATE),-1) as \"RECENT_ACCOUNT_DATE\" from member ");
+			sql.append(" WHERE MEMBER_ID = ? ");
+
+			pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, BankUI.getSession());
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) { 
+				String recent_account_date = rs.getString("RECENT_ACCOUNT_DATE"); //sql result set을 기준으로 get
+				MemberVO member = new MemberVO(recent_account_date);
+				memberList.add(member);
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			JDBCClose.close(conn, pstmt);
+		}
+		return memberList;
+		
+		
+	}
+	
+	public List<MemberVO> 개별회원목록() throws Exception {
+
+		memberList = new ArrayList<>(); // 멤버 객체를 저장할 수 있는 list
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+
+		try {
+			conn = new ConnectionFactory().getConnection();
+			StringBuilder sql = new StringBuilder();
+
+			sql.append("SELECT MEMBER_ID, PWD, NAME, birt_date,ENROLL_DATE, trim(RECENT_ACCOUNT_DATE) ");
+			sql.append(" from member ");
+			sql.append(" WHERE MEMBER_ID = ? ");
+
+			pstmt = conn.prepareStatement(sql.toString());
+			pstmt.setString(1, BankUI.getSession());
+			ResultSet rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				String id = rs.getString("member_id");
+				String pwd = rs.getString("pwd");
+				String name = rs.getString("name");
+				String birth_date = rs.getString("birt_date");
+				String enroll_date = rs.getString("enroll_date");
+				String recent_account_date = rs.getString("trim(RECENT_ACCOUNT_DATE)");
+
+				MemberVO member = new MemberVO(id, pwd, name, birth_date, enroll_date, recent_account_date);
+				memberList.add(member);
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			JDBCClose.close(conn, pstmt);
+		}
+		return memberList;
+	}
+	
 
 /////////////////////////////////////////////////////////////////////
 
@@ -202,7 +306,7 @@ public class BankDAODB {
 			StringBuilder delete_sql = new StringBuilder();
 
 			select_sql.append("SELECT ACCOUNT_NUMBER, BALANCE FROM ACCOUNT ");
-			select_sql.append("WHERE MEMBER_ID= ? ");
+			select_sql.append(" WHERE MEMBER_ID= ? ");
 			select_sql.append(" AND ACCOUNT_NUMBER= ? ");
 
 			pstmt = conn.prepareStatement(select_sql.toString());
@@ -325,7 +429,7 @@ public class BankDAODB {
 			
 			
 			update_sql.append("UPDATE MEMBER SET RECENT_ACCOUNT_DATE = ");
-			update_sql.append("(SELECT MAX(OPEN_ACCOUNT_DATE) FROM ACCOUNT WHERE MEMBER_ID =?) ");
+			update_sql.append("(SELECT MAX(OPEN_ACCOUT_DATE) FROM ACCOUNT WHERE MEMBER_ID =?) ");
 			update_sql.append(" WHERE MEMBER_ID =? ");
 			
 			pstmt = conn.prepareStatement(update_sql.toString());
@@ -351,7 +455,7 @@ public class BankDAODB {
 		Connection conn =null;
 		PreparedStatement pstmt =null;
 		
-		try {
+		try { // account에 제약조건이 잔액 0이상이 걸려있음, 그런데 거래내역에는 이런 제약조건이 없어서, 잔고를 초과하는 거래 발생 시 위(거래내역)에는 반영 / 밑(계좌 잔액)에는 실행되지 않음
 			
 			conn = new ConnectionFactory().getConnection();
 			conn.setAutoCommit(false);   // 입출금 실패 시 롤백하기 위해 오토커밋 해제 
@@ -430,7 +534,7 @@ public class BankDAODB {
 			conn = new ConnectionFactory().getConnection();
 			StringBuilder sql = new StringBuilder();
 
-			sql.append("SELECT D.ACCOUNT_NUMBER, D.BANK_NAME, D.TYPE,D.MONEY, trim(D.DEAL_DATE) as DEAL_DATE ");
+			sql.append("SELECT D.ACCOUNT_NUMBER, D.BANK_NAME, D.TYPE,D.MONEY, TO_char(D.DEAL_DATE,'YYYY-MM-DD HH24:MI:SS') as DEAL_DATE ");
 			sql.append(" FROM DEAL D, (SELECT A.MEMBER_ID, A.ACCOUNT_NUMBER ");
 			sql.append(" FROM ACCOUNT A ,MEMBER M ");
 			sql.append(" WHERE A.MEMBER_ID = M.MEMBER_ID) IV ");

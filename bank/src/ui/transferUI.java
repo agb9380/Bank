@@ -29,7 +29,7 @@ public class transferUI extends BankBaseUI {
 
 		List<AccountVO> accountList =service.개별계좌조회서비스(account); // accountList에 출금할 계좌의 정보 저장
 		
-		 // 이체할 금액이 0이 아니거나, 출금할 계좌의 잔액보다 작은 경우에만 이체 가능
+		// 이체할 금액이 0이 아니거나, 출금할 계좌의 잔액보다 작은 경우에만 이체 가능
 		if (money !=0 && money <=accountList.get(0).getBalance()) {
 			deal.setWithdrawBankName(withdrawBankName);
 			deal.setWithdrawActNo(withdrawActNo);
