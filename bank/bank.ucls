@@ -147,7 +147,7 @@
   </class>  
   <class id="17" language="java" name="vo.MemberVO" project="bank" file="/bank/src/vo/MemberVO.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1029" y="1193"/>    
+    <position height="-1" width="-1" x="1619" y="1111"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -165,7 +165,7 @@
   </class>  
   <class id="19" language="java" name="vo.DealVO" project="bank" file="/bank/src/vo/DealVO.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1365" y="1161"/>    
+    <position height="-1" width="-1" x="765" y="1119"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -174,7 +174,7 @@
   </class>  
   <class id="20" language="java" name="dao.BankDAODB" project="bank" file="/bank/src/dao/BankDAODB.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="708" y="1125"/>    
+    <position height="-1" width="-1" x="1158" y="1231"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -261,10 +261,10 @@
   <association id="44">    
     <end type="SOURCE" refId="2" navigable="false">      
       <attribute id="45" name="memberList">        
-        <position height="0" width="0" x="324" y="173"/>      
+        <position height="0" width="0" x="914" y="91"/>      
       </attribute>      
       <multiplicity id="46" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="324" y="173"/>      
+        <position height="0" width="0" x="914" y="91"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="17" navigable="true"/>    

@@ -446,7 +446,7 @@ public class BankDAODB {
 		
 	}
 	
-	public void 계좌생성(AccountVO account) {  // 한 달에 한 번 이라는 제약 조건 추가해야함
+	public void 계좌생성(AccountVO account) {
 		
 		Connection conn =null;
 		PreparedStatement pstmt =null;
