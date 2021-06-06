@@ -441,7 +441,8 @@ public class BankDAODB {
 			
 			pstmt.executeUpdate();
 			
-			// ACCOUNT 테이블에서 max 뽑아내서 MEMBER 테이블의 최근 계좌 생성일자를 업데이트하는게 아니라, 생성할 때 바로 sysdate로 최근 계좌 생성일자 업데이트 (밑에 주석처리 된 sql 대체)
+			// ACCOUNT 테이블에서 max 뽑아내서 MEMBER 테이블의 최근 계좌 생성일자를 업데이트하는게 아니라, 
+			// 생성할 때 바로 sysdate로 최근 계좌 생성일자 업데이트 (밑에 주석처리 된 sql 대체)
 			
 			update_sql.append("UPDATE MEMBER SET RECENT_ACCOUNT_DATE = SYSDATE ");
 			update_sql.append(" WHERE MEMBER_ID =? ");
