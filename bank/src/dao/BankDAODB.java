@@ -266,7 +266,6 @@ public class BankDAODB {
 
 			pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setString(1, BankUI.getSession());
-//			pstmt.setString(2, searchOneUI.getInputAct()); // UI에서 입력받은 계좌번호
 			pstmt.setString(2, account.getActNum()); // UI에서 입력받은 계좌번호
 
 			ResultSet rs = pstmt.executeQuery();
@@ -292,9 +291,9 @@ public class BankDAODB {
 
 	}
 
-	public List<AccountVO> 은행별계좌조회() {
+	public List<AccountVO> 은행별계좌조회(AccountVO account) {
 
-		accountList = new ArrayList<>();
+		ArrayList<AccountVO> accountReturnList = new ArrayList<>();
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 
@@ -309,7 +308,7 @@ public class BankDAODB {
 
 			pstmt = conn.prepareStatement(sql.toString());
 			pstmt.setString(1, BankUI.getSession());
-			pstmt.setString(2, searchBankNameUI.getInputBankName()); // UI에서 입력받은 계좌번호
+			pstmt.setString(2, account.getActName()); // UI에서 입력받은 은행명
 
 			ResultSet rs = pstmt.executeQuery();
 
@@ -320,8 +319,8 @@ public class BankDAODB {
 				int balance = rs.getInt("BALANCE");
 				String actName = rs.getString("ACCOUNT_NAME");
 
-				AccountVO account = new AccountVO(actNum, bankName, memberId, balance, actName);
-				accountList.add(account);
+				AccountVO accountVO = new AccountVO(actNum, bankName, memberId, balance, actName);
+				accountReturnList.add(accountVO);
 
 			}
 
@@ -330,7 +329,7 @@ public class BankDAODB {
 		} finally {
 			JDBCClose.close(conn, pstmt);
 		}
-		return accountList;
+		return accountReturnList;
 
 	}
 
@@ -391,53 +390,26 @@ public class BankDAODB {
 	}
 	
 	
-	public void 계좌명칭변경() {
+	public void 계좌명칭변경(AccountVO account) {
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
-		ArrayList<String> actNumList = new ArrayList();
-
-		
+	
 		try {
 			conn = new ConnectionFactory().getConnection();
 			StringBuilder select_sql = new StringBuilder();
 			StringBuilder update_sql = new StringBuilder();
-
-			select_sql.append("SELECT ACCOUNT_NUMBER FROM ACCOUNT ");
-			select_sql.append("WHERE MEMBER_ID= ? ");
-			select_sql.append(" AND ACCOUNT_NUMBER= ? ");
-
-			pstmt = conn.prepareStatement(select_sql.toString());
-			pstmt.setString(1, BankUI.getSession()); // session
-			pstmt.setString(2, alterActNameUI.getUpdateActNo()); // 삭제하고 싶은 계좌 번호
-
-			ResultSet rs = pstmt.executeQuery(); // 해당 계좌번호가 존재하는지 result set 확인
-
-			while (rs.next()) {
-				actNumList.add(rs.getString("ACCOUNT_NUMBER"));
-			}
-
-			if (actNumList.size() == 1) { // 
-				
+			
 				update_sql.append("UPDATE ACCOUNT SET ACCOUNT_NAME= ? ");
 				update_sql.append(" WHERE MEMBER_ID= ? ");
 				update_sql.append(" AND ACCOUNT_NUMBER= ? ");
 					
 					pstmt = conn.prepareStatement(update_sql.toString());
-					pstmt.setString(1, alterActNameUI.getUpdateActName());
+					pstmt.setString(1, account.getActName());
 					pstmt.setString(2, BankUI.getSession());
-					pstmt.setString(3, alterActNameUI.getUpdateActNo());
+					pstmt.setString(3, account.getActNum());
 					
 					pstmt.executeQuery();
-					System.out.println("계좌의 명칭을 변경했습니다.");
-				
-				}
-			else {
-				System.out.println("입력하신 계좌 번호가 존재하지 않습니다.");
-			}
-			
-
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {

@@ -55,8 +55,8 @@ public class BankService {
 		return accountList;
 	}
 	
-	public List<AccountVO> 은행별계좌조회서비스() throws Exception{
-		accountList=dao.은행별계좌조회();
+	public List<AccountVO> 은행별계좌조회서비스(AccountVO account) throws Exception{
+		accountList=dao.은행별계좌조회(account);
 		return accountList;
 	}
 	
@@ -64,8 +64,8 @@ public class BankService {
 		dao.계좌삭제();
 	}
 	
-	public void 계좌명칭변경서비스() throws Exception{
-		dao.계좌명칭변경();
+	public void 계좌명칭변경서비스(AccountVO account) throws Exception{
+		dao.계좌명칭변경(account);
 	}
 	
 	public void 계좌생성서비스(AccountVO account) throws Exception{

@@ -28,10 +28,9 @@ public class transferUI extends BankBaseUI {
 																		// 아이디가 가지고 있는 계좌 정보 조회)
 
 			for (int i = 0; i < withdrawCheck.size(); i++) {
-				if (withdrawActNo.equals(withdrawCheck.get(i).getActNum())) { // 입력한 계좌가 존재하는지
-					// 전체 계좌 조회에서 존재하는 계좌번호인지 확인
+				if (withdrawActNo.equals(withdrawCheck.get(i).getActNum())) { // 내가 가지고있는 계좌가 맞는지 확인
 					depositBankName = scanStr("입금할 은행을 입력하세요. :");
-					depositActNo = scanStr("입금할 계좌번호를 입력하세요. :");
+					depositActNo = scanStr("입금할 계좌번호를 입력하세요. :"); //if문안들어가면 null
 				}
 
 			}

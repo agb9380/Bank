@@ -10,6 +10,7 @@ public class AccountVO {
 	public AccountVO() {
 		
 	}
+	
 
 	public AccountVO(String actNum, String bankName, String memberId, int balance, String actName) {
 		super();
@@ -59,4 +60,14 @@ public class AccountVO {
 	public void setActName(String actName) {
 		this.actName = actName;
 	}
+
+
+	@Override
+	public String toString() {
+		return "[계좌번호=" + actNum + ", 은행명=" + bankName + ", 잔액="
+				+ balance + ", 계좌명=" + actName + "]";
+	}
+	
+	
+	
 }

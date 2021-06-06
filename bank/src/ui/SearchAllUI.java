@@ -19,6 +19,7 @@ public class SearchAllUI extends BankBaseUI {
 
 			for(AccountVO vo : list) {			
 				System.out.println(vo.getActNum()+"\t"+vo.getBankName() +"\t"+vo.getBalance() + "\t" + vo.getActName());
+//				System.out.println(vo); //AccountVO에 toString 오버라이드 해놓으면 편하게 출력가능
 			}
 			
 			
